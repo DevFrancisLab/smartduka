@@ -31,8 +31,8 @@ const HeroSection = ({ onOpenSignup }: HeroSectionProps) => {
           {/* Left content */}
           <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
             {/* Logo/Brand */}
-            <div className="mb-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold">
+            <div className="mb-3 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                 <span className="text-foreground">Smart</span>
                 <span className="text-gradient-gold">Duka</span>
               </h1>
@@ -40,7 +40,7 @@ const HeroSection = ({ onOpenSignup }: HeroSectionProps) => {
             
             {/* Tagline */}
             <p 
-              className="text-xl sm:text-2xl lg:text-3xl font-medium text-foreground mb-3 animate-fade-in"
+              className="text-lg sm:text-xl lg:text-2xl font-medium text-foreground mb-2 animate-fade-in"
               style={{ animationDelay: '0.2s' }}
             >
               Shop tracking made easy
@@ -48,7 +48,7 @@ const HeroSection = ({ onOpenSignup }: HeroSectionProps) => {
             
             {/* Value proposition */}
             <p 
-              className="text-base sm:text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-6 animate-fade-in"
+              className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto lg:mx-0 mb-5 animate-fade-in leading-relaxed"
               style={{ animationDelay: '0.3s' }}
             >
               Track your sales, expenses, and profits in Kenyan Shillings. 
@@ -57,47 +57,24 @@ const HeroSection = ({ onOpenSignup }: HeroSectionProps) => {
             
             {/* CTAs */}
             <div 
-              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start animate-fade-in mb-6"
+              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start animate-fade-in mb-5"
               style={{ animationDelay: '0.4s' }}
             >
               <Button 
                 onClick={onOpenSignup}
-                size="lg"
-                className="gradient-gold text-primary-foreground hover:opacity-90 transition-all duration-300 text-base px-6 py-5 rounded-lg font-semibold shadow-lg hover:shadow-xl animate-pulse-glow"
+                className="gradient-gold text-primary-foreground hover:opacity-90 transition-all duration-300 text-base px-8 py-6 rounded-lg font-semibold shadow-md hover:shadow-lg animate-pulse-glow w-full sm:w-auto"
               >
                 Start Using SmartDuka
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
               
-              <Button 
-                onClick={scrollToFeatures}
-                variant="ghost" 
-                size="lg"
-                className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 text-base px-6 py-5 rounded-lg"
-              >
-                <Play className="mr-2 w-4 h-4" />
-                See How It Works
-              </Button>
             </div>
             
             {/* Trust indicators */}
             <div 
-              className="flex items-center gap-4 justify-center lg:justify-start animate-fade-in text-sm"
+              className="flex items-center gap-3 justify-center lg:justify-start animate-fade-in text-xs"
               style={{ animationDelay: '0.5s' }}
             >
-              <div className="flex -space-x-3">
-                {['JM', 'AK', 'WN', 'PM'].map((initials, i) => (
-                  <div 
-                    key={i}
-                    className="w-8 h-8 rounded-full bg-card border-2 border-background flex items-center justify-center text-xs font-medium text-muted-foreground"
-                  >
-                    {initials}
-                  </div>
-                ))}
-              </div>
-              <p className="text-muted-foreground">
-                <span className="text-foreground font-semibold">500+</span> shopkeepers trust SmartDuka
-              </p>
             </div>
           </div>
           
@@ -108,13 +85,6 @@ const HeroSection = ({ onOpenSignup }: HeroSectionProps) => {
           >
             <PhoneMockup />
           </div>
-        </div>
-      </div>
-      
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden lg:block">
-        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
-          <div className="w-1 h-2 bg-muted-foreground/50 rounded-full" />
         </div>
       </div>
     </section>
