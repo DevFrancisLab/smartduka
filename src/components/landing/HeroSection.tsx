@@ -13,8 +13,14 @@ const HeroSection = ({ onOpenSignup }: HeroSectionProps) => {
 
   return (
     <section className="min-h-screen relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-card" />
+      {/* Background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url(/kenyan_shopkeeper.jpeg)' }}
+      />
+      
+      {/* Color overlay on top of image */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-card opacity-70" />
       
       {/* Subtle golden glow accent */}
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
