@@ -8,7 +8,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'replace-me-with-a-secret-key')
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '*').split(',') if os.getenv('DJANGO_ALLOWED_HOSTS') else ['*']
+ALLOWED_HOSTS = ['*']
+
+# Africa's Talking USSD Configuration
+AFRICASTALKING_USERNAME = os.getenv('AFRICASTALKING_USERNAME', 'SmartDuka')
+AFRICASTALKING_API_KEY = os.getenv('AFRICASTALKING_API_KEY', 'atsk_5d3c6f7b7f0755c84203cf8ba474cf20bdfba5fd7a3d73a9543bc5a602713a5593040b5a')
+API_BASE_URL = os.getenv('API_BASE_URL', 'http://127.0.0.1:8000')
+
+# CSRF exemption for Africa's Talking USSD webhook
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    'https://*.ngrok.io',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
+# Disable APPEND_SLASH to allow POST to /ussd without trailing slash
+APPEND_SLASH = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -20,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'core',
+    'ussd',
 ]
 
 MIDDLEWARE = [
