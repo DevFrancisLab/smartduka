@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 
 interface DashboardLayoutProps {
@@ -8,14 +8,21 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children, active = "dashboard", onNavigate }: DashboardLayoutProps) {
-  return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Sidebar is fixed on lg and above; for smaller screens it overlays via its own logic */}
-      <Sidebar active={active} onNavigate={onNavigate} />
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-      {/* Main content area. On large screens leave space for the fixed sidebar (lg:ml-64). */}
-      <main className="w-full lg:ml-64">
-        <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
+  return (
+    <div className="h-screen bg-background text-foreground overflow-hidden flex flex-col">
+      {/* Sidebar is fixed on lg and above; for smaller screens it overlays via its own logic */}
+      <Sidebar 
+        active={active} 
+        onNavigate={onNavigate}
+        isCollapsed={isCollapsed}
+        onToggleCollapse={setIsCollapsed}
+      />
+
+      {/* Main content area. On large screens leave space for the fixed sidebar (lg:ml-64 or lg:ml-20 when collapsed). */}
+      <main className={`flex-1 overflow-y-auto transition-all duration-300 ease-in-out ${isCollapsed ? "lg:ml-20" : "lg:ml-64"}`}>
+        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 lg:py-5 h-full flex flex-col">
           {/* Empty layout - insert page content here */}
           {children}
         </div>
