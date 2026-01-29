@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Home,
   ShoppingCart,
   CreditCard,
   Box,
   DollarSign,
+  AlertCircle,
   BarChart2,
   Settings,
   LogOut,
@@ -26,6 +28,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "expenses", label: "Expenses", Icon: CreditCard },
   { id: "stock", label: "Stock / Procurement", Icon: Box },
   { id: "cashfloat", label: "Cash Float", Icon: DollarSign },
+  { id: "debttracker", label: "Debts", Icon: AlertCircle },
   { id: "reports", label: "Reports", Icon: BarChart2 },
 ];
 
@@ -39,9 +42,29 @@ interface SidebarProps {
 export default function Sidebar({ active = "dashboard", onNavigate, isCollapsed = false, onToggleCollapse }: SidebarProps) {
   const [open, setOpen] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
+  const navigate = useNavigate();
 
   const handleNav = (id: string) => {
     onNavigate?.(id);
+    // navigate via router if parent didn't handle navigation
+    try {
+      const pathMap: Record<string, string> = {
+        dashboard: '/dashboard',
+        sales: '/sales',
+        expenses: '/expenses',
+        stock: '/stock',
+        cashfloat: '/cashfloat',
+        debttracker: '/debttracker',
+        reports: '/reports',
+        settings: '/settings',
+        logout: '/',
+      };
+      const navigateTo = pathMap[id] ?? `/${id}`;
+      // prefer parent navigation, but fallback to router
+      if (!onNavigate) navigate(navigateTo);
+    } catch (e) {
+      // ignore navigation errors
+    }
     setOpen(false); // close mobile panel on nav
   };
 
