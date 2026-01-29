@@ -10,9 +10,10 @@ export default function DebtTracker() {
   const [isAddDebtOpen, setIsAddDebtOpen] = useState(false);
   const [debtsData, setDebtsData] = useState<any[]>([]);
 
-  // Load saved debts on mount
-  useEffect(() => {
-    const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
+  const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
+
+  // Fetch debts from backend
+  const fetchDebts = () => {
     fetch(`${API_BASE}/api/debts/`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Failed to fetch debts');
@@ -29,10 +30,20 @@ export default function DebtTracker() {
         setDebtsData(mapped);
       })
       .catch((err) => console.warn('Could not load debts:', err));
+  };
+
+  // Load saved debts on mount
+  useEffect(() => {
+    fetchDebts();
+    // Refetch every 5 seconds to pick up USSD updates
+    const interval = setInterval(fetchDebts, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleAddDebt = (debt: any) => {
     setDebtsData([...debtsData, debt]);
+    // Refetch to ensure we have the latest data
+    setTimeout(fetchDebts, 1000);
   };
 
   const handleUpdateDebt = (updated: any) => {

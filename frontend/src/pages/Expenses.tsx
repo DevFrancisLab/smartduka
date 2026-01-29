@@ -11,15 +11,10 @@ export default function Expenses() {
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [expensesData, setExpensesData] = useState<ExpenseData[]>([]);
 
-  const handleAddExpense = (expense: ExpenseData) => {
-    setExpensesData([...expensesData, expense]);
-    console.log('Expense added:', expense);
-  };
+  const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
 
-  // Load saved expenses from backend on mount
-  useEffect(() => {
-    const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
-
+  // Fetch expenses from backend
+  const fetchExpenses = () => {
     fetch(`${API_BASE}/api/expenses/`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Failed to fetch expenses');
@@ -33,6 +28,21 @@ export default function Expenses() {
         setExpensesData(mapped);
       })
       .catch((err) => console.warn('Could not load saved expenses:', err));
+  };
+
+  const handleAddExpense = (expense: ExpenseData) => {
+    setExpensesData([...expensesData, expense]);
+    console.log('Expense added:', expense);
+    // Refetch to ensure we have the latest data
+    setTimeout(fetchExpenses, 1000);
+  };
+
+  // Load saved expenses from backend on mount
+  useEffect(() => {
+    fetchExpenses();
+    // Refetch every 5 seconds to pick up USSD updates
+    const interval = setInterval(fetchExpenses, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSearch = (query: string) => {

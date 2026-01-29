@@ -11,10 +11,10 @@ export default function Sales() {
   const [isAddSaleOpen, setIsAddSaleOpen] = useState(false);
   const [salesData, setSalesData] = useState<SaleData[]>([]);
 
-  // Load saved sales from backend on mount
-  useEffect(() => {
-    const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
+  const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
 
+  // Fetch sales from backend
+  const fetchSales = () => {
     fetch(`${API_BASE}/api/sales/`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Failed to fetch sales');
@@ -31,11 +31,21 @@ export default function Sales() {
       .catch((err) => {
         console.warn('Could not load saved sales:', err);
       });
+  };
+
+  // Load saved sales from backend on mount
+  useEffect(() => {
+    fetchSales();
+    // Refetch every 5 seconds to pick up USSD updates
+    const interval = setInterval(fetchSales, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleAddSale = (sale: SaleData) => {
     setSalesData([...salesData, sale]);
     console.log('Sale added:', sale);
+    // Refetch to ensure we have the latest data
+    setTimeout(fetchSales, 1000);
   };
 
   const handleSearch = (query: string) => {

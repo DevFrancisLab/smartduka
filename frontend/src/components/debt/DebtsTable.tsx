@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import ReminderModal from './ReminderModal';
 import EditDebtModalWrapper from './EditDebtModalWrapper';
 import { Check, AlertCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -182,16 +183,38 @@ export default function DebtsTable({ searchQuery, newDebts = [], onUpdateDebt, o
   };
 
   const handleSendReminder = (debtId: string, customerName: string) => {
-    console.log(`Send reminder to ${customerName} (debt ${debtId})`);
+    const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
+    const url = `${API_BASE}/api/debts/${debtId}/remind/`;
+    // Optional: allow custom message in future
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+      .then(async (res) => {
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || 'Failed to send reminder');
+        }
+        alert(`Reminder sent to ${customerName}`);
+      })
+      .catch((err) => {
+        console.error('Reminder failed', err);
+        alert(`Failed to send reminder to ${customerName}`);
+      });
   };
 
   // Edit / Delete UI state
   const [editingDebt, setEditingDebt] = useState<Debt | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  // Reminder modal state
+  const [reminderOpen, setReminderOpen] = useState(false);
+  const [reminderDebt, setReminderDebt] = useState<Debt | null>(null);
 
   const openEdit = (d: Debt) => {
     setEditingDebt(d);
     setIsEditOpen(true);
+  };
+
+  const openReminder = (d: Debt) => {
+    setReminderDebt(d);
+    setReminderOpen(true);
   };
 
   const handleDelete = (id: string) => {
@@ -257,7 +280,7 @@ export default function DebtsTable({ searchQuery, newDebts = [], onUpdateDebt, o
                 <Button
                   size="sm"
                   className="flex-1 h-8 text-xs bg-gradient-gold hover:bg-gradient-gold/90 text-gray-900 font-semibold"
-                  onClick={() => handleSendReminder(debt.id, debt.customerName)}
+                  onClick={() => openReminder(debt)}
                 >
                   Remind
                 </Button>
@@ -343,7 +366,7 @@ export default function DebtsTable({ searchQuery, newDebts = [], onUpdateDebt, o
                           size="sm"
                           className="h-7 px-2 text-xs bg-gradient-gold hover:bg-gradient-gold/90 text-gray-900 font-semibold shadow-sm hover:shadow-md transition-colors transform hover:-translate-y-0.5 cursor-pointer"
                           title="Send reminder"
-                          onClick={() => handleSendReminder(debt.id, debt.customerName)}
+                          onClick={() => openReminder(debt)}
                         >
                           Remind
                         </Button>
@@ -386,6 +409,29 @@ export default function DebtsTable({ searchQuery, newDebts = [], onUpdateDebt, o
       {isEditOpen && editingDebt ? (
         // lazy load modal component to avoid circular imports
         <EditDebtModalWrapper debt={editingDebt} open={isEditOpen} onClose={() => setIsEditOpen(false)} onUpdateDebt={(d: Debt) => { if (onUpdateDebt) onUpdateDebt(d); setIsEditOpen(false); }} />
+      ) : null}
+      {/* Reminder Modal (compose message) */}
+      {reminderDebt ? (
+        // lazy import to avoid circular issues
+        <React.Suspense>
+          {/* @ts-ignore - dynamic import not necessary here */}
+          <ReminderModal
+            open={reminderOpen}
+            onClose={() => { setReminderOpen(false); setReminderDebt(null); }}
+            customerName={reminderDebt.customerName}
+            defaultMessage={`Hello ${reminderDebt.customerName}, this is a reminder that you owe Ksh ${reminderDebt.amountOwed.toLocaleString()}. Please settle at your earliest convenience.`}
+            onSend={async (message: string) => {
+              const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000';
+              const url = `${API_BASE}/api/debts/${reminderDebt.id}/remind/`;
+              const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message }) });
+              if (!res.ok) {
+                const txt = await res.text();
+                throw new Error(txt || 'Failed to send reminder');
+              }
+              alert(`Reminder sent to ${reminderDebt.customerName}`);
+            }}
+          />
+        </React.Suspense>
       ) : null}
     </>
   );
