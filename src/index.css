@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SmartDuka Design System
+   Premium fintech aesthetic for African retail
+   All colors in HSL format
+*/
+
+@layer base {
+  :root {
+    /* SmartDuka Brand Colors */
+    --background: 222 47% 11%; /* Midnight Charcoal #0F172A */
+    --foreground: 210 40% 98%; /* Clean White #F8FAFC */
+
+    --card: 217 33% 17%; /* Deep Graphite #1E293B */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Kenyan Gold as primary */
+    --primary: 47 90% 57%; /* Kenyan Gold #F4C430 */
+    --primary-foreground: 222 47% 11%;
+
+    /* Soft Gold as secondary */
+    --secondary: 45 100% 70%; /* Soft Gold #FFD966 */
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 19% 80%; /* Cool Gray #CBD5E1 */
+
+    --accent: 47 90% 57%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%; /* Red #EF4444 */
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 142 71% 45%; /* Green #22C55E */
+    --success-foreground: 210 40% 98%;
+
+    --border: 217 33% 25%;
+    --input: 217 33% 25%;
+    --ring: 47 90% 57%;
+
+    --radius: 0.75rem;
+
+    /* Custom gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222 47% 11%), hsl(217 33% 17%));
+    --gradient-gold: linear-gradient(135deg, hsl(47 90% 57%), hsl(45 100% 70%));
+    --glow-gold: 0 0 60px hsl(47 90% 57% / 0.3);
+
+    /* Sidebar - keeping for compatibility */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 47 90% 57%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 25%;
+    --sidebar-ring: 47 90% 57%;
+  }
+
+  .dark {
+    /* Dark mode uses same colors - SmartDuka is dark by default */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 47 90% 57%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 45 100% 70%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 19% 80%;
+    --accent: 47 90% 57%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 25%;
+    --input: 217 33% 25%;
+    --ring: 47 90% 57%;
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 47 90% 57%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 25%;
+    --sidebar-ring: 47 90% 57%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-gold {
+    background: linear-gradient(135deg, hsl(47 90% 57%), hsl(45 100% 70%));
+  }
+  
+  .glow-gold {
+    box-shadow: 0 0 60px hsl(47 90% 57% / 0.3);
+  }
+  
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(47 90% 57%), hsl(45 100% 70%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
